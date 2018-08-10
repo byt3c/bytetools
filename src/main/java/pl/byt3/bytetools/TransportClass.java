@@ -135,7 +135,22 @@ public class TransportClass {
             clear();
         }
     }
-
+     
+    // buffer is cut off from start position s to end position e
+    public TransportClass cut(int s, int e) {
+        
+        if (s <0) { throw new ArrayIndexOutOfBoundsException("Start of cut can't be below 0" );     }
+        if (e > size-1) { throw new ArrayIndexOutOfBoundsException("End of cut can't be ower the buffer" );     }
+        if (s > e) { throw new ArrayIndexOutOfBoundsException("Start of cut can't be greater than end" );     }
+        int dl = e-s+1;
+        
+        for (int i = s; (i + dl) < size; i++) {
+            buf[i] = buf[i+dl];
+        }
+        size = size - dl;
+        return this;
+    }
+     
     public byte[] toBytes() {
         byte[] b = new byte[size];
         System.arraycopy(buf, 0, b, 0, size);
@@ -144,6 +159,14 @@ public class TransportClass {
 
     public byte[] getBuffer() {
         return buf;
+    }
+    
+   public TransportClass cutFront(int p) {
+        for (int i = p; i < size; i++) {
+            buf[i - p] = buf[i];
+        }
+        size = size - p;
+        return this;
     }
 
     public TransportClass Append(String string) {
@@ -506,7 +529,7 @@ public class TransportClass {
         TransportClass t = new TransportClass();
         for (int i = 0; i < size; i++) {
             if (buf[i] == quote) {
-                inQuotes = inQuotes ? false : true;
+                inQuotes = !inQuotes;
             }
             if (buf[i] == delimiter && !inQuotes) {
                 if (t.buf[0] == quote && t.buf[t.size - 1] == quote) { // wywalamy cudzyslowia z przodu i z tylu w srodku musza zoastac
@@ -1227,14 +1250,6 @@ public class TransportClass {
             }
         }
         return -1;
-    }
-
-    public TransportClass cutFront(int p) {
-        for (int i = p; i < size; i++) {
-            buf[i - p] = buf[i];
-        }
-        size = size - p;
-        return this;
     }
 
     public boolean contains(String filter) {
