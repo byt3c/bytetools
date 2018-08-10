@@ -4,9 +4,6 @@
  */
 package pl.byt3.bytetools;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,6 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.security.SecureRandom;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.net.ssl.HttpsURLConnection;
 
@@ -30,7 +28,7 @@ public class DataUtils {
 
     static private final String IPV4_REGEX = "(([0-1]?[0-9]{1,2}\\.)|(2[0-4][0-9]\\.)|(25[0-5]\\.)){3}(([0-1]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))";
     private static final Pattern IPV4_PATTERN = Pattern.compile(IPV4_REGEX);
-    private static final Logger LOG = LoggerFactory.getLogger(DataUtils.class);
+    private static final Logger LOG = Logger.getLogger(DataUtils.class.getName());
 
     public static int byteToInt(byte b) {
         int res = (int) b;
@@ -139,28 +137,18 @@ public class DataUtils {
         return b;
     }
 
-    public static TransportClass getString(InputStream is) {
-        try {
-            int len = getBytesAsInt(is);
-            TransportClass tr = new TransportClass();
-            tr.Append(getBytesAsString(is, len));
-            return tr;
-        } catch (IOException ex) {
-            LOG.error(null, ex);
-            return null;
-        }
+    public static TransportClass getString(InputStream is) throws IOException {
+        int len = getBytesAsInt(is);
+        TransportClass tr = new TransportClass();
+        tr.Append(getBytesAsString(is, len));
+        return tr;
     }
 
-    public static TransportClass getLongString(InputStream is) {
-        try {
-            int len = getBytesAsInt(is);
-            TransportClass tr = new TransportClass();
-            tr.Append(getBytes(is, len));
-            return tr;
-        } catch (IOException ex) {
-            LOG.error(null, ex);
-            return null;
-        }
+    public static TransportClass getLongString(InputStream is) throws IOException {
+        int len = getBytesAsInt(is);
+        TransportClass tr = new TransportClass();
+        tr.Append(getBytes(is, len));
+        return tr;
     }
 
     private static long power256(short i) {
@@ -307,20 +295,15 @@ public class DataUtils {
         return new BigInteger(130, random).toString(32);
     }
 
-    public static Integer getMyPid() {
-        try {
-            java.lang.management.RuntimeMXBean runtime = java.lang.management.ManagementFactory.getRuntimeMXBean();
-            java.lang.reflect.Field jvm = runtime.getClass().getDeclaredField("jvm");
-            jvm.setAccessible(true);
-            sun.management.VMManagement mgmt = (sun.management.VMManagement) jvm.get(runtime);
-            java.lang.reflect.Method pid_method = mgmt.getClass().getDeclaredMethod("getProcessId");
-            pid_method.setAccessible(true);
-            int pid = (Integer) pid_method.invoke(mgmt);
-            return pid;
-        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
-            LOG.error(null, ex);
-        }
-        return null;
+    public static Integer getMyPid() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        java.lang.management.RuntimeMXBean runtime = java.lang.management.ManagementFactory.getRuntimeMXBean();
+        java.lang.reflect.Field jvm = runtime.getClass().getDeclaredField("jvm");
+        jvm.setAccessible(true);
+        sun.management.VMManagement mgmt = (sun.management.VMManagement) jvm.get(runtime);
+        java.lang.reflect.Method pid_method = mgmt.getClass().getDeclaredMethod("getProcessId");
+        pid_method.setAccessible(true);
+        int pid = (Integer) pid_method.invoke(mgmt);
+        return pid;
     }
 
 }
