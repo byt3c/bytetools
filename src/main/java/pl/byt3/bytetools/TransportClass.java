@@ -26,8 +26,7 @@ public class TransportClass {
     private int size = 0;
     public int position = 0;
     private int chunk = 70;
-    public int locked = 0;
-    public String LocalName = "";
+    public long tag = 0;
     public String encoding = "UTF-8";
     public static final int MASK_VALID = 0x01;
     private static final byte[] CHARS = new byte[1 << 16];
@@ -125,8 +124,7 @@ public class TransportClass {
         TransportClass t = new TransportClass(encoding);
         t.Append(this);
         t.name = name;
-        t.locked = locked;
-        t.LocalName = new String().concat(LocalName);
+        t.tag = tag;
         return t;
     }
 

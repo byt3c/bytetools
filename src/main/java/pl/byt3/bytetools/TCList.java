@@ -45,11 +45,11 @@ public class TCList {
         }
     }
 
-    public TransportClass getMinLocked() {
+    public TransportClass getMinTag() {
         if (objs.size() > 1) {
             TransportClass t = (TransportClass) objs.get(0);
             for (int i = 1; i < objs.size(); i++) {
-                if (((TransportClass) objs.get(i)).locked < t.locked) {
+                if (((TransportClass) objs.get(i)).tag < t.tag) {
                     t = (TransportClass) objs.get(i);
                 }
             }
@@ -59,34 +59,14 @@ public class TCList {
         }
     }
 
-    public synchronized TransportClass GetByLocked(int lock) {
+    public synchronized TransportClass GetByTag(long lock) {
         timestamp = System.currentTimeMillis();
         TransportClass t;
         Iterator i = objs.iterator();
         while (i.hasNext()) {
             t = (TransportClass) i.next();
-            if (t.locked == lock) {
+            if (t.tag == lock) {
                 return t;
-            }
-        }
-        return null;
-    }
-
-    public int countLocked() {
-        int res = 0;
-        for (int i = 0; i < objs.size(); i++) {
-            if (get(i).locked > 0) {
-                res++;
-            }
-        }
-        return res;
-    }
-
-    public TransportClass GetFirstUnlocked() {
-        for (int i = 0; i < objs.size(); i++) {
-            TransportClass o = (TransportClass) objs.get(i);
-            if (o.locked == 0) {
-                return o;
             }
         }
         return null;
