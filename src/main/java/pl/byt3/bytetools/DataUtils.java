@@ -31,12 +31,7 @@ public class DataUtils {
     private static final Logger LOG = Logger.getLogger(DataUtils.class.getName());
 
     public static int byteToInt(byte b) {
-        int res = (int) b;
-        if (res < 0) {
-            return 256 + res;
-        } else {
-            return res;
-        }
+        return (b & 0xFF);
     }
 
     public static void generateKey(TransportClass key, final int size) {
