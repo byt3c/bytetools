@@ -22,15 +22,40 @@ import java.nio.ByteBuffer;
 public class TransportClass {
 
     private byte[] buf = null;
+
+    /**
+     *
+     */
     public String name = "";
     private int size = 0;
+
+    /**
+     *
+     */
     public int position = 0;
     private int chunk = 70;
+
+    /**
+     *
+     */
     public long tag = 0;
+
+    /**
+     *
+     */
     public String encoding = "UTF-8";
+
+    /**
+     *
+     */
     public static final int MASK_VALID = 0x01;
     private static final byte[] CHARS = new byte[1 << 16];
 
+    /**
+     *
+     * @param token
+     * @return
+     */
     public TransportClass Append(char token) {
         if (buf != null) {
             setLength(1 + size);
@@ -39,6 +64,10 @@ public class TransportClass {
         return this;
     }
 
+    /**
+     *
+     * @param s
+     */
     public void AppendShortString(String s) {
         byte[] bx = s.getBytes();
         byte b = (byte) bx.length;
@@ -46,12 +75,22 @@ public class TransportClass {
         Append(bx);
     }
 
+    /**
+     *
+     * @param s
+     */
     public void AppendShortString(TransportClass s) {
         byte b = (byte) s.Length();
         Append(b);
         Append(s);
     }
 
+    /**
+     *
+     * @param offset
+     * @param count
+     * @return
+     */
     public TransportClass extract(int offset, int count) {
         if (offset + count > size) {
             return null;
@@ -65,10 +104,20 @@ public class TransportClass {
         }
     }
 
+    /**
+     *
+     * @param offset
+     * @param delimiter
+     * @return
+     */
     public TransportClass Part(int offset, char delimiter) {
         return Part(offset, (byte) delimiter);
     }
 
+    /**
+     *
+     * @param length
+     */
     public void ensureCapacity(int length) {
         if (buf != null) {
             int ckl;
@@ -89,6 +138,11 @@ public class TransportClass {
         }
     }
 
+    /**
+     *
+     * @param length
+     * @return
+     */
     public TransportClass setLength(int length) {
         if (buf != null) {
             if (length > size) {
@@ -103,23 +157,42 @@ public class TransportClass {
         return null;
     }
 
+    /**
+     *
+     */
     public TransportClass() {
         clear();
     }
 
+    /**
+     *
+     * @param encoding
+     */
     public TransportClass(String encoding) {
         clear();
         this.encoding = encoding;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isEmptyString() {
         return size == 0;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isNull() {
         return buf == null;
     }
 
+    /**
+     *
+     * @return
+     */
     public TransportClass Copy() {
         TransportClass t = new TransportClass(encoding);
         t.Append(this);
@@ -128,38 +201,68 @@ public class TransportClass {
         return t;
     }
 
+    /**
+     *
+     * @param empty
+     */
     public TransportClass(boolean empty) {
         if (!empty) {
             clear();
         }
     }
-     
+
     // buffer is cut off from start position s to end position e
+
+    /**
+     *
+     * @param s
+     * @param e
+     * @return
+     */
     public TransportClass cut(int s, int e) {
-        
-        if (s <0) { throw new ArrayIndexOutOfBoundsException("Start of cut can't be below 0" );     }
-        if (e > size-1) { throw new ArrayIndexOutOfBoundsException("End of cut can't be ower the buffer" );     }
-        if (s > e) { throw new ArrayIndexOutOfBoundsException("Start of cut can't be greater than end" );     }
-        int dl = e-s+1;
-        
+
+        if (s < 0) {
+            throw new ArrayIndexOutOfBoundsException("Start of cut can't be below 0");
+        }
+        if (e > size - 1) {
+            throw new ArrayIndexOutOfBoundsException("End of cut can't be ower the buffer");
+        }
+        if (s > e) {
+            throw new ArrayIndexOutOfBoundsException("Start of cut can't be greater than end");
+        }
+        int dl = e - s + 1;
+
         for (int i = s; (i + dl) < size; i++) {
-            buf[i] = buf[i+dl];
+            buf[i] = buf[i + dl];
         }
         size = size - dl;
         return this;
     }
-     
+
+    /**
+     *
+     * @return
+     */
     public byte[] toBytes() {
         byte[] b = new byte[size];
         System.arraycopy(buf, 0, b, 0, size);
         return b;
     }
 
+    /**
+     *
+     * @return
+     */
     public byte[] getBuffer() {
         return buf;
     }
-    
-   public TransportClass cutFront(int p) {
+
+    /**
+     *
+     * @param p
+     * @return
+     */
+    public TransportClass cutFront(int p) {
         for (int i = p; i < size; i++) {
             buf[i - p] = buf[i];
         }
@@ -167,10 +270,20 @@ public class TransportClass {
         return this;
     }
 
+    /**
+     *
+     * @param string
+     * @return
+     */
     public TransportClass Append(String string) {
         return Append(string.getBytes());
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public TransportClass Append(TransportClass data) {
         if (buf != null) {
             int op = size;
@@ -184,6 +297,11 @@ public class TransportClass {
         }
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public TransportClass Append(byte[] data) {
         if (buf != null) {
             int op = size;
@@ -196,18 +314,32 @@ public class TransportClass {
         return null;
     }
 
+    /**
+     *
+     * @param data
+     */
     public void Assign(byte[] data) {
         buf = data;
         size = data.length;
         position = 0;
     }
 
+    /**
+     *
+     * @param data
+     * @param sizex
+     */
     public void Assign(byte[] data, int sizex) {
         buf = data;
         size = sizex;
         position = 0;
     }
 
+    /**
+     *
+     * @param data
+     * @param amount
+     */
     public void Append(byte[] data, int amount) {
         if (buf != null) {
             int op = size;
@@ -218,6 +350,11 @@ public class TransportClass {
         }
     }
 
+    /**
+     *
+     * @param data
+     * @param amount
+     */
     public void Append(ByteBuffer data, int amount) {
         if (buf != null) {
             int op = size;
@@ -228,6 +365,12 @@ public class TransportClass {
         }
     }
 
+    /**
+     *
+     * @param data
+     * @param amount
+     * @param offset
+     */
     public void Append(byte[] data, int amount, int offset) {
         if (buf != null) {
             int op = size;
@@ -238,6 +381,11 @@ public class TransportClass {
         }
     }
 
+    /**
+     *
+     * @param data
+     * @param poss
+     */
     public void write(byte[] data, int poss) {
         ensureCapacity(position + data.length);
         if (buf != null) {
@@ -248,6 +396,12 @@ public class TransportClass {
         position = poss + data.length;
     }
 
+    /**
+     *
+     * @param data
+     * @param index
+     * @param count
+     */
     public void write(byte[] data, int index, int count) {
         ensureCapacity(position + count);
         if (buf != null) {
@@ -258,6 +412,11 @@ public class TransportClass {
         position = index + count;
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public boolean write(byte[] data) {
         ensureCapacity(position + data.length);
         if (buf != null) {
@@ -271,6 +430,12 @@ public class TransportClass {
         }
     }
 
+    /**
+     *
+     * @param data
+     * @param poss
+     * @return
+     */
     public boolean write(byte data, int poss) {
         ensureCapacity(position + 1);
         if (buf != null) {
@@ -281,6 +446,11 @@ public class TransportClass {
         }
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public boolean write(byte data) {
         if (buf != null) {
             if (size == position) {
@@ -294,6 +464,11 @@ public class TransportClass {
         }
     }
 
+    /**
+     *
+     * @param liczba
+     * @param poss
+     */
     public void write(int liczba, int poss) {
         byte[] b = new byte[4];
         b[0] = (byte) (liczba);
@@ -303,6 +478,11 @@ public class TransportClass {
         write(b, poss);
     }
 
+    /**
+     *
+     * @param liczba
+     * @return
+     */
     public boolean write(int liczba) {
         byte[] b = new byte[4];
         b[0] = (byte) (liczba);
@@ -312,6 +492,11 @@ public class TransportClass {
         return write(b);
     }
 
+    /**
+     *
+     * @param liczba
+     * @return
+     */
     public boolean write(long liczba) {
         byte[] b = new byte[8];
         b[0] = (byte) (liczba);
@@ -325,6 +510,11 @@ public class TransportClass {
         return write(b);
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     public TransportClass Append(byte data) {
         if (buf != null) {
             setLength(1 + size);
@@ -333,6 +523,10 @@ public class TransportClass {
         return this;
     }
 
+    /**
+     *
+     * @param b
+     */
     public void Insert(byte b) {
         if (buf != null) {
             setLength(1 + size);
@@ -358,6 +552,12 @@ public class TransportClass {
         return null;
     }
 
+    /**
+     *
+     * @param encoding
+     * @return
+     * @throws UnsupportedEncodingException
+     */
     public String toString(String encoding) throws UnsupportedEncodingException {
         if (buf != null) {
             return new String(buf, 0, size, encoding);
@@ -366,6 +566,11 @@ public class TransportClass {
         }
     }
 
+    /**
+     *
+     * @param encoding
+     * @return
+     */
     public TransportClass TranslateFromTo(String encoding) {
         if (buf != null) {
             try {
@@ -401,6 +606,10 @@ public class TransportClass {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public Long toStringLong() {
         if (buf != null) {
             String d = "";
@@ -415,6 +624,10 @@ public class TransportClass {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public int Length() {
         if (buf != null) {
             return size;
@@ -423,11 +636,18 @@ public class TransportClass {
         }
     }
 
+    /**
+     *
+     */
     public final void clear() {
         name = "";
         clearData();
     }
 
+    /**
+     *
+     * @return
+     */
     public final TransportClass clearData() {
         size = 0;
         position = 0;
@@ -440,6 +660,10 @@ public class TransportClass {
         return this;
     }
 
+    /**
+     *
+     * @param liczba
+     */
     public void appendLong(long liczba) {
         byte[] b = new byte[8];
         b[0] = (byte) (liczba);
@@ -453,6 +677,10 @@ public class TransportClass {
         Append(b);
     }
 
+    /**
+     *
+     * @param liczba
+     */
     public void appendInt(int liczba) {
         byte[] b = new byte[4];
         b[0] = (byte) (liczba);
@@ -462,6 +690,10 @@ public class TransportClass {
         Append(b);
     }
 
+    /**
+     *
+     * @return
+     */
     public TransportClass SqlEscapeStr() {
         TransportClass t = new TransportClass(encoding);
         byte b = 92;
@@ -474,14 +706,29 @@ public class TransportClass {
         return t;
     }
 
+    /**
+     *
+     * @param delimiter
+     * @return
+     */
     public TCList explode(char delimiter) {
         return (explode((byte) delimiter));
     }
 
+    /**
+     *
+     * @param delimiter
+     * @return
+     */
     public TCList explode(String delimiter) {
         return (explode(new TransportClass().Append(delimiter)));
     }
 
+    /**
+     *
+     * @param delimiter
+     * @return
+     */
     public TCList explode(byte delimiter) {
         TCList outs = new TCList();
         TransportClass t = new TransportClass();
@@ -497,10 +744,22 @@ public class TransportClass {
         return outs;
     }
 
+    /**
+     *
+     * @param delimiter
+     * @param maxcount
+     * @return
+     */
     public TCList explode(char delimiter, int maxcount) {
         return (explode((byte) delimiter, maxcount));
     }
 
+    /**
+     *
+     * @param delimiter
+     * @param maxcount
+     * @return
+     */
     public TCList explode(byte delimiter, int maxcount) {
         maxcount--;
         TCList outs = new TCList();
@@ -518,6 +777,11 @@ public class TransportClass {
         return outs;
     }
 
+    /**
+     *
+     * @param del
+     * @return
+     */
     public TCList explodeCSV(char del) { // we cant expolde text fields 
         byte delimiter = (byte) del;
         byte quote = (byte) '"';
@@ -544,6 +808,12 @@ public class TransportClass {
 
     }
 
+    /**
+     *
+     * @param delimiter
+     * @param pos
+     * @return
+     */
     public boolean IsAtPosition(TransportClass delimiter, int pos) {
         if (delimiter == null) {
             return false;
@@ -559,6 +829,11 @@ public class TransportClass {
         return true;
     }
 
+    /**
+     *
+     * @param delimiter
+     * @return
+     */
     public TCList explode(TransportClass delimiter) {
         if (delimiter.Length() == 1) {
             return explode(delimiter.getBuffer()[0]);
@@ -578,6 +853,11 @@ public class TransportClass {
         return outs;
     }
 
+    /**
+     *
+     * @param delimiters
+     * @return
+     */
     public TCList explodeByAny(TransportClass delimiters) {
         if (delimiters.Length() == 1) {
             return explode(delimiters.getBuffer()[0]);
@@ -609,6 +889,12 @@ public class TransportClass {
         return outs;
     }
 
+    /**
+     *
+     * @param offset
+     * @param b
+     * @return
+     */
     public TransportClass Part(int offset, byte b) {
         int cp = -1;
         TransportClass t = null;
@@ -633,6 +919,10 @@ public class TransportClass {
         return t;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer toStringInt() {
         if (buf != null) {
             StringBuilder s = new StringBuilder();
@@ -650,14 +940,29 @@ public class TransportClass {
         }
     }
 
+    /**
+     *
+     * @param poss
+     * @return
+     */
     public byte readByte(int poss) {
         return buf[poss];
     }
 
+    /**
+     *
+     * @param poss
+     * @return
+     */
     public int readWord(int poss) {
         return (int) (readByte(poss) & 0xff) + (int) ((readByte(poss + 1) & 0xff) << 8);
     }
 
+    /**
+     *
+     * @param poss
+     * @return
+     */
     public TransportClass readBinary(int poss) {
         if (poss + 4 > size) {
             throw new ArrayIndexOutOfBoundsException("position + 4 > size; p=" + String.valueOf(position + 4) + "; s=" + String.valueOf(size));
@@ -673,6 +978,10 @@ public class TransportClass {
         return wynik;
     }
 
+    /**
+     *
+     * @return
+     */
     public TransportClass readBinary() {
         if (position + 4 > size) {
             throw new ArrayIndexOutOfBoundsException("position + 4 > size; p=" + String.valueOf(position + 4) + "; s=" + String.valueOf(size));
@@ -690,6 +999,11 @@ public class TransportClass {
         return wynik;
     }
 
+    /**
+     *
+     * @param count
+     * @return
+     */
     public TransportClass readBytes(int count) {
         if (position + count > size) {
             throw new ArrayIndexOutOfBoundsException("position + 4 > size; p=" + String.valueOf(position + 4) + "; s=" + String.valueOf(size));
@@ -707,6 +1021,10 @@ public class TransportClass {
         return wynik;
     }
 
+    /**
+     *
+     * @return
+     */
     public TCList toArrayParameter() {
         if ((buf == null) || (size < 5)) {
             return new TCList();
@@ -722,28 +1040,48 @@ public class TransportClass {
         return tcl;
     }
 
+    /**
+     *
+     * @param data
+     */
     public void writeBinary(TransportClass data) {
         write(data.Length());
         write(data.getBuffer(), 0, data.size);
     }
 
+    /**
+     *
+     * @param data
+     */
     public void AppendBinary(TransportClass data) {
         appendInt(data.Length());
         Append(data);
     }
 
+    /**
+     *
+     * @param s
+     */
     public void writeShortString(String s) {
         byte b = (byte) s.length();
         write(b);
         write(s.getBytes());
     }
 
+    /**
+     *
+     * @param s
+     */
     public void writeLongString(String s) {
         byte[] b = s.getBytes();
         write(b.length);
         write(b);
     }
 
+    /**
+     *
+     * @param in
+     */
     public void writeWord(int in) {
         byte[] b = new byte[2];
         b[0] = (byte) (in);
@@ -751,6 +1089,10 @@ public class TransportClass {
         Append(b);
     }
 
+    /**
+     *
+     * @param word
+     */
     public void AppendWord(int word) {
         int pp = position;
         position = size;
@@ -758,12 +1100,21 @@ public class TransportClass {
         position = pp;
     }
 
+    /**
+     *
+     * @param s
+     */
     public void AppendLongString(String s) {
         byte[] b = s.getBytes();
         appendInt(b.length);
         Append(b);
     }
 
+    /**
+     *
+     * @param poss
+     * @return
+     */
     public String getString(int poss) {
         TransportClass wynik = new TransportClass();
         int i = 0;
@@ -778,6 +1129,11 @@ public class TransportClass {
         return wynik.toString();
     }
 
+    /**
+     *
+     * @param poss
+     * @return
+     */
     public TransportClass readShortString(int poss) {
         TransportClass wynik = new TransportClass();
         int len = DataUtils.byteToInt(buf[poss]);
@@ -787,6 +1143,10 @@ public class TransportClass {
         return wynik;
     }
 
+    /**
+     *
+     * @return
+     */
     public TransportClass readShortString() {
         TransportClass wynik = new TransportClass();
         int len = DataUtils.byteToInt(buf[position]);
@@ -797,6 +1157,11 @@ public class TransportClass {
         return wynik;
     }
 
+    /**
+     *
+     * @param poss
+     * @return
+     */
     public long readLong(int poss) {
         byte[] b = new byte[8];
         for (int i = 0; i < 8; i++) {
@@ -805,6 +1170,10 @@ public class TransportClass {
         return DataUtils.bytesToLong(b);
     }
 
+    /**
+     *
+     * @return
+     */
     public long readLong() {
         byte[] b = new byte[8];
         for (int i = 0; i < 8; i++) {
@@ -814,11 +1183,20 @@ public class TransportClass {
         return DataUtils.bytesToLong(b);
     }
 
+    /**
+     *
+     * @return
+     */
     public byte readByte() {
         position++;
         return buf[position - 1];
     }
 
+    /**
+     *
+     * @param poss
+     * @return
+     */
     public int readInt(int poss) {
         byte[] b = new byte[4];
         for (int i = 0; i < 4; i++) {
@@ -827,6 +1205,10 @@ public class TransportClass {
         return DataUtils.bytesToInt(b);
     }
 
+    /**
+     *
+     * @return
+     */
     public int readInt() {
         byte[] b = new byte[4];
         for (int i = 0; i < 4; i++) {
@@ -836,6 +1218,12 @@ public class TransportClass {
         return DataUtils.bytesToInt(b);
     }
 
+    /**
+     *
+     * @param what
+     * @param to
+     * @return
+     */
     public TransportClass replace(char what, char to) {
         for (int i = 0; i < size; i++) {
             if ((char) buf[i] == what) {
@@ -845,10 +1233,22 @@ public class TransportClass {
         return this;
     }
 
+    /**
+     *
+     * @param what
+     * @param to
+     * @return
+     */
     public int replace(String what, String to) {
         return replace(new TransportClass().Append(what), new TransportClass().Append(what));
     }
 
+    /**
+     *
+     * @param what
+     * @param to
+     * @return
+     */
     public int replace(TransportClass what, TransportClass to) {
         int res = 0;
         /*for (int i = 0; i < Length(); i++) {
@@ -889,6 +1289,10 @@ public class TransportClass {
         return 1;
     }
 
+    /**
+     *
+     * @return
+     */
     public TransportClass sanitizeURL() {
         removeInvalidStringChars();
         TransportClass tc = new TransportClass();
@@ -935,6 +1339,10 @@ public class TransportClass {
         return this;
     }
 
+    /**
+     *
+     * @return
+     */
     public TransportClass removeInvalidStringChars() {
         Charset utf8 = Charset.forName(encoding);
         for (int i = 0; i < size; i++) {
@@ -968,6 +1376,10 @@ public class TransportClass {
         return this;
     }
 
+    /**
+     *
+     * @return
+     */
     public String toValidXMLString() {
         String tts = toString();
         StringBuilder outs = new StringBuilder(tts.length());
@@ -983,6 +1395,14 @@ public class TransportClass {
         return outs.toString();
     }
 
+    /**
+     *
+     * @param what
+     * @param to
+     * @param start
+     * @param count
+     * @return
+     */
     public TransportClass replace(char what, char to, int start, int count) {
         for (int i = start; i < start + count; i++) {
             if ((char) buf[i] == what) {
@@ -992,6 +1412,10 @@ public class TransportClass {
         return this;
     }
 
+    /**
+     *
+     * @return
+     */
     public TransportClass StripNumbers() {
         TransportClass t = new TransportClass(encoding);
         for (int i = 0; i < size; i++) {
@@ -1006,6 +1430,10 @@ public class TransportClass {
         return t;
     }
 
+    /**
+     *
+     * @return
+     */
     public TransportClass StripNonNumbers() {
         TransportClass t = new TransportClass(encoding);
         for (int i = 0; i < size; i++) {
@@ -1019,6 +1447,12 @@ public class TransportClass {
         return t;
     }
 
+    /**
+     *
+     * @param items
+     * @param separator
+     * @return
+     */
     public TransportClass implode(Collection<?> items, String separator) {
         clearData();
         Iterator i = items.iterator();
@@ -1033,6 +1467,10 @@ public class TransportClass {
         return this;
     }
 
+    /**
+     *
+     * @return
+     */
     public TransportClass ensureIsNumber() {
         try {
             double dd = Double.valueOf(toString());
@@ -1043,6 +1481,11 @@ public class TransportClass {
         return this;
     }
 
+    /**
+     *
+     * @param tc
+     * @return
+     */
     public boolean contentEquals(TransportClass tc) {
         if (tc == null) {
             return false;
@@ -1058,6 +1501,11 @@ public class TransportClass {
         return true;
     }
 
+    /**
+     *
+     * @param i
+     * @return
+     */
     public Character charAt(int i) {
         if (i >= size) {
             return null;
@@ -1087,6 +1535,11 @@ public class TransportClass {
         return this;
     }
 
+    /**
+     *
+     * @param c
+     * @return
+     */
     public TCList ExplodeToSimpleConfigs(char c) {
         TCList cfgs = explode('\n');
         for (int i = cfgs.count() - 1; i >= 0; i--) {
@@ -1113,6 +1566,9 @@ public class TransportClass {
         return cfgs;
     }
 
+    /**
+     *
+     */
     public void reverse() {
         byte[] newbuff = new byte[buf.length];
         for (int i = size; i > 0; i--) {
@@ -1121,6 +1577,12 @@ public class TransportClass {
         buf = newbuff;
     }
 
+    /**
+     *
+     * @param items
+     * @param separator
+     * @return
+     */
     public TransportClass implode(String[] items, String separator) {
         clearData();
         for (int i = 0; i < items.length; i++) {
@@ -1132,24 +1594,48 @@ public class TransportClass {
         return this;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSize() {
         return size;
     }
 
+    /**
+     *
+     * @return
+     */
     public TransportClass toAlphaNumeric() {
         TransportClass t = new TransportClass();
 
         return t;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isValidIP() {
         return DataUtils.isValidIPV4(toString());
     }
 
+    /**
+     *
+     * @param key
+     * @param insert
+     * @return
+     */
     public int InsertAfter(String key, String insert) {
         return InsertAfter(new TransportClass().Append(key), new TransportClass().Append(insert));
     }
 
+    /**
+     *
+     * @param key
+     * @param insert
+     * @return
+     */
     public int InsertAfter(TransportClass key, TransportClass insert) {
         int res = 0;
         for (int i = 0; i < Length(); i++) {
@@ -1169,6 +1655,11 @@ public class TransportClass {
         return res;
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     public boolean contentEquals(String key) {
         if (key == null) {
             return false;
@@ -1184,6 +1675,11 @@ public class TransportClass {
         return true;
     }
 
+    /**
+     *
+     * @param b
+     * @return
+     */
     public TransportClass shift_scramble(byte b) {
         if (b > 0) {
             for (int i = 0; i < size; i++) {
@@ -1207,10 +1703,21 @@ public class TransportClass {
         return this;
     }
 
+    /**
+     *
+     * @param chunkDelimiter
+     * @return
+     */
     public int pos(char chunkDelimiter) {
         return pos(chunkDelimiter, 0);
     }
 
+    /**
+     *
+     * @param chunkDelimiter
+     * @param offset
+     * @return
+     */
     public int pos(char chunkDelimiter, int offset) {
         for (int i = offset; i < size; i++) {
             if ((byte) buf[i] == (byte) chunkDelimiter) {
@@ -1220,14 +1727,32 @@ public class TransportClass {
         return -1;
     }
 
+    /**
+     *
+     * @param filter
+     * @return
+     */
     public int pos(byte[] filter) {
         return pos(filter, 0);
     }
 
+    /**
+     *
+     * @param filter
+     * @param offset
+     * @return
+     */
     public int pos(byte[] filter, int offset) {
         return pos(filter, offset, size - offset);
     }
 
+    /**
+     *
+     * @param filter
+     * @param offset
+     * @param maxCount
+     * @return
+     */
     public int pos(byte[] filter, int offset, int maxCount) {
         if (filter.length > maxCount) {
             return -1;
@@ -1250,11 +1775,29 @@ public class TransportClass {
         return -1;
     }
 
+    /**
+     *
+     * @param filter
+     * @return
+     */
     public boolean contains(String filter) {
         return contains(filter.getBytes());
     }
 
+    /**
+     *
+     * @param filter
+     * @return
+     */
     public boolean contains(byte[] filter) {
         return pos(filter) >= 0;
+    }
+
+    /**
+     *
+     * @return String containing HEX representation of buffer contents.
+     */
+    public String toHex() {
+        return SpecUtils.toHex(buf,size-1);
     }
 }

@@ -19,20 +19,37 @@ public class DateUtils {
 
     private static final String HOUR_FORMAT = "HH";
 
+    /**
+     *
+     * @return
+     */
     public static String nowMin() {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date().getTime());
     }
 
+    /**
+     *
+     * @return
+     */
     public static String nowFileSafe() {
         return new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss").format(new Date().getTime());
     }
 
+    /**
+     *
+     * @return
+     */
     public static int getCurrentHour() {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdfHour = new SimpleDateFormat(HOUR_FORMAT);
         return Integer.parseInt(sdfHour.format(cal.getTime()));
     }
 
+    /**
+     *
+     * @param t
+     * @return
+     */
     public static String span(long t) {
         long sp = System.currentTimeMillis() - t;
         sp = (long) (sp / 1000);
@@ -60,6 +77,11 @@ public class DateUtils {
         }
     }
 
+    /**
+     *
+     * @param t
+     * @return
+     */
     public static String DelphiTimeToStr(long t) {
         SimpleDateFormat now = new SimpleDateFormat("dd MM yyyy HH mm ss");
         Date dat = new Date();
@@ -67,26 +89,52 @@ public class DateUtils {
         return now.format(dat);
     }
 
+    /**
+     *
+     * @return
+     */
     public static String now() {
         SimpleDateFormat now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dat = new Date();
         return now.format(dat);
     }
 
+    /**
+     *
+     * @param dateFormat
+     * @return
+     */
     public static String now(String dateFormat) {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
         return sdf.format(cal.getTime());
     }
 
+    /**
+     *
+     * @param date
+     * @param days
+     * @return
+     */
     public static Date MoveDays(Date date, int days) {
         return new Date(date.getTime() + 86400000L * days);
     }
 
+    /**
+     *
+     * @param date
+     * @param hours
+     * @return
+     */
     public static Date MoveHours(Date date, int hours) {
         return new Date(date.getTime() + 3600000L * hours);
     }
 
+    /**
+     *
+     * @param timestamp
+     * @return
+     */
     public static String dateX(long timestamp) {
         SimpleDateFormat now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dat = new Date();
@@ -94,21 +142,42 @@ public class DateUtils {
         return now.format(dat);
     }
 
+    /**
+     *
+     * @param date
+     * @return
+     */
     public static String dateX(Date date) {
         SimpleDateFormat now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return now.format(date);
     }
 
+    /**
+     *
+     * @param date
+     * @return
+     */
     public static String DocStamp(Date date) {
         SimpleDateFormat now = new SimpleDateFormat("yyyy/MM");
         return now.format(date);
     }
 
+    /**
+     *
+     * @param date
+     * @param format
+     * @return
+     */
     public static String dateX(Date date, String format) {
         SimpleDateFormat now = new SimpleDateFormat(format);
         return now.format(date);
     }
 
+    /**
+     *
+     * @param date
+     * @return
+     */
     public static String StartOfDay(Date date) {
         Calendar cal = new GregorianCalendar();
         DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -120,6 +189,11 @@ public class DateUtils {
         return dfm.format(cal.getTime());
     }
 
+    /**
+     *
+     * @param date
+     * @return
+     */
     public static String StartOfMonth(Date date) {
         Calendar cal = new GregorianCalendar();
         DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -132,10 +206,18 @@ public class DateUtils {
         return dfm.format(cal.getTime());
     }
 
+    /**
+     *
+     * @return
+     */
     public static String StartOfToday() {
         return StartOfDay(new Date());
     }
 
+    /**
+     *
+     * @return
+     */
     public static String StartOfCurMonth() {
         return StartOfMonth(new Date());
     }
@@ -152,6 +234,12 @@ public class DateUtils {
         return (formatter.parse(datka));
     }
 
+    /**
+     *
+     * @param date
+     * @param minutes
+     * @return
+     */
     public static Date MoveMinutes(Date date, int minutes) {
         return new Date(date.getTime() + 60000L * minutes);
     }

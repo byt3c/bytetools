@@ -15,17 +15,38 @@ import java.util.HashMap;
  */
 public class Log {
 
+    /**
+     *
+     */
     public static HashMap<String, Integer> debugFilters = new HashMap<>();
+
+    /**
+     *
+     */
     public static boolean silent = false;
+
+    /**
+     *
+     */
     public static int msFilter = 5000;
     private static String lastLogMsg = null;
     private static int lastLogCOunter = 0;
     private static long timestamp = System.currentTimeMillis();
 
+    /**
+     *
+     * @param who
+     * @param what
+     */
     public static void Log(final Class who, String what) {
         Log(who, what, null);
     }
 
+    /**
+     *
+     * @param who
+     * @param what
+     */
     public static void Log(final Object who, String what) {
         Log(who.getClass(), what, null);
     }
@@ -44,10 +65,22 @@ public class Log {
         }
     }
 
+    /**
+     *
+     * @param who
+     * @param what
+     * @param ex
+     */
     public static void Log(final Object who, String what, Exception ex) {
         Log(who.getClass(), what, ex);
     }
 
+    /**
+     *
+     * @param who
+     * @param what
+     * @param ex
+     */
     public static void LogOOM(final Class who, String what, OutOfMemoryError ex) {
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -62,14 +95,33 @@ public class Log {
         }
     }
 
+    /**
+     *
+     * @param who
+     * @param what
+     * @param ex
+     */
     public static void Log(final Class who, String what, Exception ex) {
         DUMP(who, who.getCanonicalName(), what, ex, "", true);
     }
 
+    /**
+     *
+     * @param who
+     * @param what
+     * @param ex
+     * @param filter
+     */
     public static void Log(final Class who, String what, Exception ex, boolean filter) {
         DUMP(who, who.getCanonicalName(), what, ex, "", filter);
     }
 
+    /**
+     *
+     * @param who
+     * @param what
+     * @param ex
+     */
     @SuppressWarnings({"ThrowableInstanceNotThrown", "ThrowableInstanceNeverThrown"})
     public static void quickLogEx(final Class who, String what, Exception ex) {
         if (ex == null) {
@@ -85,12 +137,20 @@ public class Log {
         DUMP(who, who.getSimpleName(), what + " cause : " + ex.getLocalizedMessage(), null, " [" + lineNumber + "]", true);
     }
 
+    /**
+     *
+     */
     public static void noDebug() {
         Log.debugFilters.clear();
     }
 
     // * means anything - all debug filters
     // any other should be calss name we want to monitor
+
+    /**
+     *
+     * @param prefix
+     */
     public static void addDebugFilter(String prefix) {
         Integer i = Log.debugFilters.get(prefix);
         if (i == null) {
@@ -98,18 +158,40 @@ public class Log {
         }
     }
 
+    /**
+     *
+     * @param who
+     * @param what
+     */
     public static void Debug(final Object who, String what) {
         DEBUG(who.getClass(), what, null);
     }
 
+    /**
+     *
+     * @param who
+     * @param what
+     */
     public static void Debug(final Class who, String what) {
         DEBUG(who, what, null);
     }
 
+    /**
+     *
+     * @param who
+     * @param what
+     * @param ex
+     */
     public static void Debug(final Object who, String what, Exception ex) {
         DEBUG(who.getClass(), what, ex);
     }
 
+    /**
+     *
+     * @param who
+     * @param what
+     * @param ex
+     */
     public static void Debug(final Class who, String what, Exception ex) {
         DEBUG(who, what, ex);
     }
@@ -137,6 +219,10 @@ public class Log {
 
     }
 
+    /**
+     *
+     * @param outs
+     */
     public static void print(String outs) {
         if (Log.silent) {
             return;

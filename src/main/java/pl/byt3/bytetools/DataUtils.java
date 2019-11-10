@@ -30,10 +30,20 @@ public class DataUtils {
     private static final Pattern IPV4_PATTERN = Pattern.compile(IPV4_REGEX);
     private static final Logger LOG = Logger.getLogger(DataUtils.class.getName());
 
+    /**
+     *
+     * @param b
+     * @return
+     */
     public static int byteToInt(byte b) {
         return (b & 0xFF);
     }
 
+    /**
+     *
+     * @param key
+     * @param size
+     */
     public static void generateKey(TransportClass key, final int size) {
         SecureRandom r = new SecureRandom();
         byte[] h = new byte[size];
@@ -41,12 +51,23 @@ public class DataUtils {
         key.Append(h);
     }
 
+    /**
+     *
+     * @param size
+     * @return
+     */
     public static TransportClass generateKey(final int size) {
         TransportClass tc = new TransportClass();
         generateKey(tc, size);
         return tc;
     }
 
+    /**
+     *
+     * @param is
+     * @return
+     * @throws IOException
+     */
     @SuppressWarnings("ConvertToTryWithResources")
     public static int getBytesAsInt(InputStream is) throws IOException {
         if (is == null) {
@@ -66,6 +87,11 @@ public class DataUtils {
         return (int) bytesToInt(b);
     }
 
+    /**
+     *
+     * @param input
+     * @return
+     */
     public static int bytesToInt(byte[] input) {
         if (input.length < 4) {
             return 0;
@@ -80,6 +106,11 @@ public class DataUtils {
         }
     }
 
+    /**
+     *
+     * @param input
+     * @return
+     */
     public static long bytesToLong(byte[] input) {
         if (input.length < 8) {
             return 0;
@@ -94,6 +125,12 @@ public class DataUtils {
         }
     }
 
+    /**
+     *
+     * @param is
+     * @return
+     * @throws IOException
+     */
     public static byte getByte(InputStream is) throws IOException {
         if (is.available() < 1) {
             throw new IOException("No data in stream - found : [" + is.available() + "]");
@@ -101,6 +138,12 @@ public class DataUtils {
         return (byte) is.read();
     }
 
+    /**
+     *
+     * @param is
+     * @return
+     * @throws IOException
+     */
     public static int getBytesAsWord(InputStream is) throws IOException {
         if (is.available() < 2) {
             throw new IOException("Not enough data available[reqired:2, found:" + is.available() + "]");
@@ -114,6 +157,13 @@ public class DataUtils {
 
     }
 
+    /**
+     *
+     * @param is
+     * @param len
+     * @return
+     * @throws IOException
+     */
     public static String getBytesAsString(InputStream is, int len) throws IOException {
         if (is.available() < len) {
             throw new IOException("Not enough data available[reqired:" + len + ", found:" + is.available() + "]");
@@ -123,6 +173,13 @@ public class DataUtils {
         return new String(b);
     }
 
+    /**
+     *
+     * @param is
+     * @param len
+     * @return
+     * @throws IOException
+     */
     public static byte[] getBytes(InputStream is, int len) throws IOException {
         if (is.available() < len) {
             throw new IOException("Not enough data available[reqired:" + len + ", found:" + is.available() + "]");
@@ -132,6 +189,12 @@ public class DataUtils {
         return b;
     }
 
+    /**
+     *
+     * @param is
+     * @return
+     * @throws IOException
+     */
     public static TransportClass getString(InputStream is) throws IOException {
         int len = getBytesAsInt(is);
         TransportClass tr = new TransportClass();
@@ -139,6 +202,12 @@ public class DataUtils {
         return tr;
     }
 
+    /**
+     *
+     * @param is
+     * @return
+     * @throws IOException
+     */
     public static TransportClass getLongString(InputStream is) throws IOException {
         int len = getBytesAsInt(is);
         TransportClass tr = new TransportClass();
@@ -154,6 +223,11 @@ public class DataUtils {
         }
     }
 
+    /**
+     *
+     * @param b
+     * @return
+     */
     public static long convert3BytesToCount(byte[] b) {
         long ac = 0;
         for (short i = 0; i < 3; i++) {
@@ -166,6 +240,11 @@ public class DataUtils {
         return ac;
     }
 
+    /**
+     *
+     * @param b
+     * @return
+     */
     public static long convert4BytesToCount(byte[] b) {
         short i;
         long ac = 0;
@@ -281,15 +360,33 @@ public class DataUtils {
         return connection.getInputStream();
     }
 
+    /**
+     *
+     * @param s
+     * @return
+     */
     public static boolean isValidIPV4(final String s) {
         return IPV4_PATTERN.matcher(s).matches();
     }
 
+    /**
+     *
+     * @return
+     */
     public static String nextSessionId() {
         SecureRandom random = new SecureRandom();
         return new BigInteger(130, random).toString(32);
     }
 
+    /**
+     *
+     * @return
+     * @throws NoSuchFieldException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     */
     public static Integer getMyPid() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         java.lang.management.RuntimeMXBean runtime = java.lang.management.ManagementFactory.getRuntimeMXBean();
         java.lang.reflect.Field jvm = runtime.getClass().getDeclaredField("jvm");

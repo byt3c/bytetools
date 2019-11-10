@@ -28,6 +28,11 @@ public class FileUtils {
 
     private static final String OS = System.getProperty("os.name").toLowerCase();
 
+    /**
+     *
+     * @param filePath
+     * @return
+     */
     public static long getFileSize(String filePath) {
         File file = new File(filePath);
         if (file.exists() && file.isFile()) {
@@ -37,6 +42,12 @@ public class FileUtils {
         }
     }
 
+    /**
+     *
+     * @param pathToJar
+     * @return
+     * @throws IOException
+     */
     public static String[] gerJarNameVersion(String pathToJar) throws IOException {
         java.io.File file = new java.io.File(pathToJar);
         String versionNumber = "";
@@ -69,6 +80,11 @@ public class FileUtils {
         return res;
     }
 
+    /**
+     *
+     * @param filePath
+     * @return
+     */
     public static TransportClass loadFile(String filePath) {
         if (!fileExist(filePath)) {
             return null;
@@ -100,6 +116,13 @@ public class FileUtils {
         }
     }
 
+    /**
+     *
+     * @param path
+     * @param fileName
+     * @param datas
+     * @return
+     */
     public static boolean saveFile(String path, String fileName, TransportClass datas) {
         File file = new File(path);
         FileOutputStream fos = null;
@@ -184,10 +207,20 @@ public class FileUtils {
         return tc;
     }
 
+    /**
+     *
+     * @param file
+     * @param datas
+     * @return
+     */
     public static boolean saveFile(String file, TransportClass datas) {
         return saveFile(file.substring(0, file.lastIndexOf("/") + 1), file.substring(file.lastIndexOf("/") + 1), datas);
     }
 
+    /**
+     *
+     * @param filePath
+     */
     public static void deleteFile(String filePath) {
         File file = new File(filePath);
         if (file.exists()) {
@@ -195,16 +228,31 @@ public class FileUtils {
         }
     }
 
+    /**
+     *
+     * @param filePath
+     * @return
+     */
     public static boolean fileExist(String filePath) {
         File file = new File(filePath);
         return file.exists();
     }
 
+    /**
+     *
+     * @param filePath
+     * @return
+     */
     public static boolean DirectoryExist(String filePath) {
         File file = new File(filePath);
         return file.exists() && file.isDirectory();
     }
 
+    /**
+     *
+     * @param dir
+     * @return
+     */
     public static boolean removeDirectory(String dir) {
         File file = new File(dir);
         if (!file.isDirectory()) {
@@ -221,6 +269,12 @@ public class FileUtils {
         return file.delete();
     }
 
+    /**
+     *
+     * @param folder
+     * @param ext
+     * @return
+     */
     public static ArrayList<String> getFileList(String folder, String ext) {
         if (ext == null) {
             return null;
@@ -239,6 +293,11 @@ public class FileUtils {
         return list;
     }
 
+    /**
+     *
+     * @param dir
+     * @return
+     */
     public static ArrayList<String> getDirList(String dir) {
         File file = new File(dir);
         if (!file.exists() || !file.isDirectory()) {
@@ -254,6 +313,11 @@ public class FileUtils {
         return list;
     }
 
+    /**
+     *
+     * @param path
+     * @return
+     */
     public static String getParentDir(String path) {
         if (path.equals(File.separator)) {
             return path;
@@ -273,6 +337,11 @@ public class FileUtils {
         }
     }
 
+    /**
+     *
+     * @param filter
+     * @return
+     */
     public static File[] findFilesF(String filter) {
         File dir = new File(FileUtils.getParentDir(filter));
         if (!dir.exists() || !dir.isDirectory()) {
@@ -282,6 +351,11 @@ public class FileUtils {
         return dir.listFiles(ff);
     }
 
+    /**
+     *
+     * @param filter
+     * @return
+     */
     public static ArrayList<String> findFiles(String filter) {
         File[] files = FileUtils.findFilesF(filter);
         if (files == null) {
@@ -296,6 +370,11 @@ public class FileUtils {
         return list;
     }
 
+    /**
+     *
+     * @param files
+     * @return
+     */
     public static String findNewest(File[] files) {
         //Log.Debug(FileUtils.class, "fles : " + files.length);
         long ts = Long.MIN_VALUE;
@@ -314,6 +393,10 @@ public class FileUtils {
         return res;
     }
 
+    /**
+     *
+     * @param path
+     */
     public static void createDirectory(String path) {
         File file = new File(path);
         if (file.exists() && file.isDirectory()) {
@@ -322,6 +405,11 @@ public class FileUtils {
         file.mkdirs();
     }
 
+    /**
+     *
+     * @param fileName
+     * @return
+     */
     public static long lastModified(String fileName) {
         File file = new File(fileName);
         if (!file.exists()) {
@@ -330,6 +418,12 @@ public class FileUtils {
         return file.lastModified();
     }
 
+    /**
+     *
+     * @param from
+     * @param to
+     * @return
+     */
     public static boolean copyFile(String from, String to) {
         TransportClass tc = loadFile(from);
         if (tc == null) {
@@ -338,6 +432,12 @@ public class FileUtils {
         return saveFile(to, tc);
     }
 
+    /**
+     *
+     * @param dir
+     * @return
+     * @throws IOException
+     */
     public static boolean isSymlink(String dir) throws IOException {
         File file = new File(dir);
         if (!file.exists() || file.isFile()) {
@@ -470,6 +570,12 @@ public class FileUtils {
         return tc;
     }
 
+    /**
+     *
+     * @param file
+     * @param gzipFile
+     * @return
+     */
     public static boolean compressGzipFile(String file, String gzipFile) {
         FileInputStream fis = null;
         FileOutputStream fos = null;
@@ -514,6 +620,13 @@ public class FileUtils {
         return false;
     }
 
+    /**
+     *
+     * @param gzipFile
+     * @param newFile
+     * @param append
+     * @return
+     */
     public static boolean decompressGzipFile(String gzipFile, String newFile, boolean append) {
         FileInputStream fis = null;
         FileOutputStream fos = null;
@@ -549,22 +662,42 @@ public class FileUtils {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     public static boolean isWindows() {
         return (OS.contains("win"));
     }
 
+    /**
+     *
+     * @return
+     */
     public static boolean isMac() {
         return (OS.contains("mac"));
     }
 
+    /**
+     *
+     * @return
+     */
     public static boolean isUnix() {
         return (OS.contains("nix") || OS.contains("nux") || OS.indexOf("aix") > 0);
     }
 
+    /**
+     *
+     * @return
+     */
     public static boolean isSolaris() {
         return (OS.contains("sunos"));
     }
 
+    /**
+     *
+     * @return
+     */
     public static String getOS() {
         if (isWindows()) {
             return "win";
@@ -579,6 +712,11 @@ public class FileUtils {
         }
     }
 
+    /**
+     *
+     * @param jarFile
+     * @return
+     */
     public static long getCompliationTime(String jarFile) {
         try {
             JarFile jf = new JarFile(jarFile);
@@ -591,11 +729,23 @@ public class FileUtils {
         return -1;
     }
 
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
     public static String getWorkingDirectory() throws IOException {
         File currentDirectory = new File(new File(".").getAbsolutePath());
         return currentDirectory.getCanonicalPath();
     }
 
+    /**
+     *
+     * @param path
+     * @param symlink
+     * @return
+     * @throws IOException
+     */
     public static boolean symlinkPointsTo(String path, String symlink) throws IOException {
         File file = new File(path);
         if (!file.exists()) {
@@ -611,10 +761,26 @@ public class FileUtils {
         return sl.getCanonicalFile().toString().equals(path);
     }
 
+    /**
+     *
+     * @param source
+     * @param link
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public static void createSymLink(String source, String link) throws IOException, InterruptedException {
         execShellCmd("ln -s " + source + " " + link);
     }
 
+    /**
+     *
+     * @param logFile
+     * @param offset
+     * @param chunkDelimiter
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public static TransportClass loadFromFileLine(String logFile, int offset, Character chunkDelimiter) throws FileNotFoundException, IOException {
         File f = new File(logFile);
         if (!f.exists()) {

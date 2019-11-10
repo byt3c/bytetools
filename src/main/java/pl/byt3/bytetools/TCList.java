@@ -14,18 +14,36 @@ import java.util.Iterator;
 public class TCList {
 
     private final ArrayList<TransportClass> objs = new ArrayList<>();
+
+    /**
+     *
+     */
     public long timestamp = 0;
 
+    /**
+     *
+     * @param tc
+     * @return
+     */
     public final TCList add(TransportClass tc) {
         objs.add(tc);
         timestamp = System.currentTimeMillis();
         return this;
     }
 
+    /**
+     *
+     * @return
+     */
     public synchronized int count() {
         return objs.size();
     }
 
+    /**
+     *
+     * @param list
+     * @return
+     */
     public TCList addList(TCList list) {
         synchronized (objs) {
             for (int i = 0; i < list.count(); i++) {
@@ -35,16 +53,27 @@ public class TCList {
         return this;
     }
 
+    /**
+     *
+     */
     public TCList() {
 
     }
 
+    /**
+     *
+     * @param count
+     */
     public TCList(int count) {
         for (int i = 0; i < count; i++) {
             add(new TransportClass());
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public TransportClass getMinTag() {
         if (objs.size() > 1) {
             TransportClass t = (TransportClass) objs.get(0);
@@ -59,6 +88,11 @@ public class TCList {
         }
     }
 
+    /**
+     *
+     * @param lock
+     * @return
+     */
     public synchronized TransportClass GetByTag(long lock) {
         timestamp = System.currentTimeMillis();
         TransportClass t;
@@ -72,10 +106,19 @@ public class TCList {
         return null;
     }
 
+    /**
+     *
+     * @param index
+     * @return
+     */
     public TransportClass get(int index) {
         return (TransportClass) objs.get(index);
     }
 
+    /**
+     *
+     * @param name
+     */
     public void DeleteByName(String name) {
         timestamp = System.currentTimeMillis();
         TransportClass t;
@@ -91,6 +134,11 @@ public class TCList {
         }
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public TransportClass GetByName(String name) {
         TransportClass t;
         Iterator i = objs.iterator();
@@ -103,17 +151,29 @@ public class TCList {
         return null;
     }
 
+    /**
+     *
+     * @param index
+     * @return
+     */
     public TransportClass delete(int index) {
         synchronized (objs) {
             return objs.remove(index);
         }
     }
 
+    /**
+     *
+     */
     public synchronized void clear() {
         timestamp = System.currentTimeMillis();
         objs.clear();
     }
 
+    /**
+     *
+     * @return
+     */
     public TransportClass[] toArray() {
         TransportClass[] res = new TransportClass[objs.size()];
         for (int i = 0; i < objs.size(); i++) {
@@ -131,10 +191,20 @@ public class TCList {
         return res;
     }
 
+    /**
+     *
+     * @param content
+     * @return
+     */
     public int countContaining(String content) {
         return countContaining(new TransportClass().Append(content));
     }
 
+    /**
+     *
+     * @param content
+     * @return
+     */
     public int countContaining(TransportClass content) {
         int res = 0;
         for (int i = 0; i < objs.size(); i++) {
@@ -145,6 +215,11 @@ public class TCList {
         return res;
     }
 
+    /**
+     *
+     * @param delimiter
+     * @return
+     */
     public TransportClass Implode(String delimiter) {
         TransportClass res = new TransportClass();
         for (int i = 0; i < objs.size(); i++) {
@@ -156,6 +231,11 @@ public class TCList {
         return res;
     }
 
+    /**
+     *
+     * @param delimiter
+     * @return
+     */
     public TransportClass RevImplode(String delimiter) {
         TransportClass res = new TransportClass();
         int x = objs.size() - 1;
@@ -168,6 +248,11 @@ public class TCList {
         return res;
     }
 
+    /**
+     *
+     * @param delimiter
+     * @return
+     */
     public TransportClass Implode(TransportClass delimiter) {
         TransportClass res = new TransportClass();
         for (int i = 0; i < objs.size(); i++) {
@@ -179,6 +264,12 @@ public class TCList {
         return res;
     }
 
+    /**
+     *
+     * @param delimiter
+     * @param index
+     * @return
+     */
     public TransportClass Implode(TransportClass delimiter, int index) {
         TransportClass res = new TransportClass();
         for (int i = index; i < objs.size(); i++) {
@@ -190,6 +281,12 @@ public class TCList {
         return res;
     }
 
+    /**
+     *
+     * @param delimiter
+     * @param index
+     * @return
+     */
     public TransportClass Implode(String delimiter, int index) {
         TransportClass res = new TransportClass();
         for (int i = index; i < objs.size(); i++) {
@@ -201,10 +298,22 @@ public class TCList {
         return res;
     }
 
+    /**
+     *
+     * @param separator
+     * @param delimiter
+     * @return
+     */
     public TransportClass ImplodeName(String separator, String delimiter) {
         return ImplodeName(separator, new TransportClass().Append(delimiter));
     }
 
+    /**
+     *
+     * @param separator
+     * @param delimiter
+     * @return
+     */
     public TransportClass ImplodeName(String separator, TransportClass delimiter) {
         TransportClass res = new TransportClass();
         for (int i = 0; i < objs.size(); i++) {
@@ -218,6 +327,10 @@ public class TCList {
         return res;
     }
 
+    /**
+     *
+     * @return
+     */
     public TCList removeEmpty() {
         synchronized (objs) {
             for (int i = objs.size() - 1; i >= 0; i--) {
@@ -235,6 +348,11 @@ public class TCList {
         return this;
     }
 
+    /**
+     *
+     * @param t
+     * @return
+     */
     public TransportClass getByContent(TransportClass t) {
         for (int i = 0; i < objs.size(); i++) {
             if (get(i).contentEquals(t)) {
@@ -244,6 +362,10 @@ public class TCList {
         return null;
     }
 
+    /**
+     *
+     * @param pre
+     */
     public void deleteByContent(TransportClass pre) {
         synchronized (objs) {
             for (int i = objs.size() - 1; i >= 0; i--) {
@@ -255,6 +377,11 @@ public class TCList {
         }
     }
 
+    /**
+     *
+     * @param needle
+     * @return
+     */
     public TransportClass getContaining(String needle) {
         for (int i = 0; i < objs.size(); i++) {
             TransportClass t = get(i);
@@ -265,6 +392,11 @@ public class TCList {
         return null;
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     public TCList remove(String key) {
         synchronized (objs) {
             for (int i = objs.size() - 1; i >= 0; i--) {
