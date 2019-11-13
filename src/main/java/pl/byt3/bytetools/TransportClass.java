@@ -1798,6 +1798,6 @@ public class TransportClass {
      * @return String containing HEX representation of buffer contents.
      */
     public String toHex() {
-        return SpecUtils.toHex(buf,size-1);
+        return SpecUtils.toHex(buf,size);
     }
 }
