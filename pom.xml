@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>pl.byt3</groupId>
     <artifactId>ByteTools</artifactId>
-    <version>1.06-SNAPSHOT</version>
+    <version>1.07-SNAPSHOT</version>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
