@@ -37,7 +37,7 @@ public class SpecUtils {
      * @return
      */
     public static double tempB20(int hib, int lob) { // dla DS18B20
-        double ter, tem;
+        double ter;
         int thib, tlob;
         tlob = lob;
         tlob = tlob & 0xF0;
@@ -65,6 +65,19 @@ public class SpecUtils {
             return '0' + Integer.toHexString(tb).toUpperCase();
         }
     }
+    
+    /**
+     *
+     * @param x
+     * @return String containing HEX representation of provided byte
+     */
+    public static String toHex(char x) {
+        if (x > 15) {
+            return Integer.toHexString(x).toUpperCase();
+        } else {
+            return '0' + Integer.toHexString(x).toUpperCase();
+        }
+    }
 
     /**
      *
@@ -72,6 +85,15 @@ public class SpecUtils {
      * @return String containing HEX representation of array contents
      */
     public static String toHex(byte[] x) {
+        return toHex(x, x.length - 1);
+    }
+    
+    /**
+     *
+     * @param x - source byte array
+     * @return String containing HEX representation of array contents
+     */
+    public static String toHex(char[] x) {
         return toHex(x, x.length - 1);
     }
 
@@ -82,6 +104,28 @@ public class SpecUtils {
      * @return String containing HEX representation of array contents until specified index
      */
     public static String toHex(byte[] x, int limit) {
+        if (x.length == 0) {
+            return "";
+        }
+        if (x.length > 1) {
+            TransportClass ts = new TransportClass();
+            ts.ensureCapacity(limit * 2);
+            for (int i = 0; i < limit; i++) {
+                ts.Append(SpecUtils.toHex(x[i]));
+            }
+            return ts.toString();
+        } else {
+            return toHex(x[0]);
+        }
+    }
+    
+    /**
+     *
+     * @param x - source byte array
+     * @param limit - index where to stop parsing array
+     * @return String containing HEX representation of array contents until specified index
+     */
+    public static String toHex(char[] x, int limit) {
         if (x.length == 0) {
             return "";
         }
