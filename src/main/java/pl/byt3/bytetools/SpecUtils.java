@@ -65,7 +65,7 @@ public class SpecUtils {
             return '0' + Integer.toHexString(tb).toUpperCase();
         }
     }
-    
+
     /**
      *
      * @param x
@@ -85,54 +85,79 @@ public class SpecUtils {
      * @return String containing HEX representation of array contents
      */
     public static String toHex(byte[] x) {
-        return toHex(x, x.length - 1);
+        return toHex(x, x.length);
     }
-    
+
     /**
      *
-     * @param x - source byte array
+     * @param x - source char array
      * @return String containing HEX representation of array contents
      */
     public static String toHex(char[] x) {
-        return toHex(x, x.length - 1);
+        return toHex(x, x.length);
+    }
+
+    /**
+     *
+     * @param x - source char array
+     * @param limit - index where to stop parsing array
+     * @return String containing HEX representation of array contents until
+     * specified index
+     */
+    public static String toHex(char[] x, int limit) {
+        return toHex(x, 0, limit);
     }
 
     /**
      *
      * @param x - source byte array
      * @param limit - index where to stop parsing array
-     * @return String containing HEX representation of array contents until specified index
+     * @return String containing HEX representation of array contents until
+     * specified index
      */
     public static String toHex(byte[] x, int limit) {
-        if (x.length == 0) {
-            return "";
-        }
-        if (x.length > 1) {
-            TransportClass ts = new TransportClass();
-            ts.ensureCapacity(limit * 2);
-            for (int i = 0; i < limit; i++) {
-                ts.Append(SpecUtils.toHex(x[i]));
-            }
-            return ts.toString();
-        } else {
-            return toHex(x[0]);
-        }
+        return toHex(toCharArr(x), 0, limit);
     }
-    
+
+    public static char[] toCharArr(byte[] ar) {
+        char[] outs = new char[ar.length];
+        for (int i = 0; i < ar.length; i++) {
+            outs[i] = (char) (ar[i] & 0xFF);
+        }
+        return outs;
+    }
+
     /**
      *
      * @param x - source byte array
+     * @param offset - index where to start parsing array
      * @param limit - index where to stop parsing array
-     * @return String containing HEX representation of array contents until specified index
+     * @return String containing HEX representation of array contents until
+     * specified index
      */
-    public static String toHex(char[] x, int limit) {
+    public static String toHex(byte[] x, int offset, int limit) {
+        return toHex(toCharArr(x), offset, limit);
+    }
+
+    /**
+     *
+     * @param x - source char array
+     * @param offset - index where to start parsing array
+     * @param limit - index where to stop parsing array
+     * @return String containing HEX representation of array contents until
+     * specified index
+     */
+    public static String toHex(char[] x, int offset, int limit) {
         if (x.length == 0) {
+            return "";
+        }
+        if (offset == limit) {
             return "";
         }
         if (x.length > 1) {
             TransportClass ts = new TransportClass();
-            ts.ensureCapacity(limit * 2);
-            for (int i = 0; i < limit; i++) {
+            ts.ensureCapacity((offset - limit) * 2);
+            for (int i = offset; i < limit; i++) {
                 ts.Append(SpecUtils.toHex(x[i]));
             }
             return ts.toString();
