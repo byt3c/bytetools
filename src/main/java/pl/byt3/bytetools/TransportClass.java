@@ -4,16 +4,17 @@
  */
 package pl.byt3.bytetools;
 
-import com.sun.org.apache.xerces.internal.util.XMLChar;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Iterator;
-import java.nio.ByteBuffer;
+
+import com.sun.org.apache.xerces.internal.util.XMLChar;
 
 /**
  *
@@ -49,7 +50,7 @@ public class TransportClass {
      *
      */
     public static final int MASK_VALID = 0x01;
-    private static final byte[] CHARS = new byte[1 << 16];
+    //private static final byte[] CHARS = new byte[1 << 16];
 
     /**
      *
@@ -1250,7 +1251,7 @@ public class TransportClass {
      * @return
      */
     public int replace(TransportClass what, TransportClass to) {
-        int res = 0;
+        //int res = 0;
         /*for (int i = 0; i < Length(); i++) {
          if (IsAtPosition(what, i)) {
          if (what.Length() == to.Length()) {

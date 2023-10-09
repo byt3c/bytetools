@@ -10,13 +10,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Base64;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.security.SecureRandom;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.net.ssl.HttpsURLConnection;
 
@@ -28,7 +28,7 @@ public class DataUtils {
 
     static private final String IPV4_REGEX = "(([0-1]?[0-9]{1,2}\\.)|(2[0-4][0-9]\\.)|(25[0-5]\\.)){3}(([0-1]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))";
     private static final Pattern IPV4_PATTERN = Pattern.compile(IPV4_REGEX);
-    private static final Logger LOG = Logger.getLogger(DataUtils.class.getName());
+    //private static final Logger LOG = Logger.getLogger(DataUtils.class.getName());
 
     /**
      *
@@ -343,7 +343,7 @@ public class DataUtils {
             connection = (HttpURLConnection) url.openConnection();
         }
         if (login != null && password != null) {
-            connection.setRequestProperty("Authorization", "Basic " + new sun.misc.BASE64Encoder().encode((login + ":" + password).getBytes()));
+            connection.setRequestProperty("Authorization", "Basic " + Base64.getEncoder().encodeToString((login + ":" + password).getBytes()));
         }
         if (headers != null) {
             for (int i = 0; i < headers.length; i++) {

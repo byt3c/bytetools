@@ -57,7 +57,7 @@ public class FileUtils {
             java.util.jar.Manifest manifest = jar.getManifest();
             java.util.jar.Attributes attributes = manifest.getMainAttributes();
             if (attributes != null) {
-                java.util.Iterator it = attributes.keySet().iterator();
+                final java.util.Iterator it = attributes.keySet().iterator();
                 while (it.hasNext()) {
                     java.util.jar.Attributes.Name key = (java.util.jar.Attributes.Name) it.next();
                     String keyword = key.toString();
@@ -721,6 +721,7 @@ public class FileUtils {
         try {
             JarFile jf = new JarFile(jarFile);
             ZipEntry manifest = jf.getEntry("META-INF/MANIFEST.MF");
+            jf.close();
             return manifest.getTime();
 
         } catch (IOException ex) {
