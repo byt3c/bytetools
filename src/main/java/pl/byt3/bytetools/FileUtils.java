@@ -285,9 +285,9 @@ public class FileUtils {
         }
         String[] files = file.list();
         ArrayList<String> list = new ArrayList<>();
-        for (int i = 0; i < files.length; i++) {
-            if (files[i].endsWith(ext)) {
-                list.add(files[i]);
+        for (String file1 : files) {
+            if (file1.endsWith(ext)) {
+                list.add(file1);
             }
         }
         return list;
@@ -382,8 +382,7 @@ public class FileUtils {
             return "";
         }
         String res = null;
-        for (int i = 0; i < files.length; i++) {
-            File f = files[i];
+        for (File f : files) {
             //Log.Debug(FileUtils.class, "fle : " + f.getPath() + " " + f.lastModified());
             if (f.lastModified() > ts) {
                 res = f.getPath();
@@ -732,8 +731,7 @@ public class FileUtils {
 
     /**
      *
-     * @return
-     * @throws IOException
+     * @return @throws IOException
      */
     public static String getWorkingDirectory() throws IOException {
         File currentDirectory = new File(new File(".").getAbsolutePath());
