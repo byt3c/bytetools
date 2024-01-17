@@ -16,6 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.ByteBuffer;
 import java.security.SecureRandom;
 import java.util.regex.Pattern;
 import javax.net.ssl.HttpsURLConnection;
@@ -28,6 +29,7 @@ public class DataUtils {
 
     static private final String IPV4_REGEX = "(([0-1]?[0-9]{1,2}\\.)|(2[0-4][0-9]\\.)|(25[0-5]\\.)){3}(([0-1]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))";
     private static final Pattern IPV4_PATTERN = Pattern.compile(IPV4_REGEX);
+    private static final ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
     //private static final Logger LOG = Logger.getLogger(DataUtils.class.getName());
 
     /**
@@ -125,6 +127,11 @@ public class DataUtils {
         }
     }
 
+    /*public static long bytesToLong(byte[] bytes) {
+        buffer.put(bytes, 0, bytes.length);
+        buffer.flip();//need flip 
+        return buffer.getLong();
+    } */
     /**
      *
      * @param is
@@ -380,8 +387,7 @@ public class DataUtils {
 
     /**
      *
-     * @return
-     * @throws NoSuchFieldException
+     * @return @throws NoSuchFieldException
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
      * @throws NoSuchMethodException
@@ -396,6 +402,11 @@ public class DataUtils {
         pid_method.setAccessible(true);
         int pid = (Integer) pid_method.invoke(mgmt);
         return pid;
+    }
+
+    public static byte[] longToBytes(long x) {
+        buffer.putLong(0, x);
+        return buffer.array();
     }
 
 }
